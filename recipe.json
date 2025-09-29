@@ -1,16 +1,161 @@
 {
+    "name": "Pork and Apple Meatballs with Onion Gravy and Mashed Potatoes",
     "steps": [
         {
-            "id": "a1",
+            "id": "1a",
             "duration": 5,
             "prepable": true
+        },
+        {
+            "id": "1b",
+            "duration": 5
+        },
+        {
+            "id": "1c",
+            "duration": 2,
+            "prepable": true
+        },
+        {
+            "id": "1d",
+            "duration": 3,
+            "prepable": true
+        },
+        {
+            "id": "1e",
+            "duration": 4,
+            "prepable": true
+        },
+        {
+            "id": "1f",
+            "duration": 3,
+            "prepable": true
+        },
+        {
+            "id": "1g",
+            "duration": 3,
+            "parents": [
+                "1c",
+                "1d"
+            ]
+        },
+        {
+            "id": "2a",
+            "duration": 5,
+            "parents": [
+                "1g"
+            ]
         },
         {
             "id": "2b",
             "duration": 15,
             "hands_off": true,
             "parents": [
-                "a1"
+                "a1",
+                "2a"
+            ]
+        },
+        {
+            "id": "2c",
+            "duration": 1,
+            "parents": [
+                "2b"
+            ],
+            "prepable": true
+        },
+        {
+            "id": "2d",
+            "duration": 20,
+            "parents": [
+                "1b",
+                "1f"
+            ],
+            "hands_off": true
+        },
+        {
+            "id": "3a",
+            "duration": 2,
+            "parents": [
+                "1e"
+            ]
+        },
+        {
+            "id": "3b",
+            "duration": 10,
+            "parents": [
+                "3a"
+            ],
+            "hands_off": true
+        },
+        {
+            "id": "3c",
+            "duration": 2,
+            "parents": [
+                "3b"
+            ]
+        },
+        {
+            "id": "4a",
+            "duration": 1,
+            "parents": [
+                "3c"
+            ]
+        },
+        {
+            "id": "4b",
+            "duration": 6,
+            "parents": [
+                "4a"
+            ],
+            "hands_off": true
+        },
+        {
+            "id": "5a",
+            "duration": 1,
+            "parents": [
+                "2d"
+            ]
+        },
+        {
+            "id": "5b",
+            "duration": 3,
+            "parents": [
+                "5a"
+            ]
+        },
+        {
+            "id": "5c",
+            "duration": 2
+        },
+        {
+            "id": "5d",
+            "duration": 2,
+            "parents": [
+                "5c"
+            ]
+        },
+        {
+            "id": "5e",
+            "duration": 4,
+            "parents": [
+                "5d"
+            ],
+            "hands_off": true
+        },
+        {
+            "id": "6a",
+            "duration": 2,
+            "parents": [
+                "2c",
+                "4b"
+            ]
+        },
+        {
+            "id": "6b",
+            "duration": 1,
+            "parents": [
+                "5b",
+                "5e",
+                "6a"
             ]
         }
     ]

@@ -32,23 +32,47 @@ class Recipe:
         return cls(steps=[Step(**i) for i in data["steps"]])
 
     def to_graph(self) -> nx.DiGraph:
-        pass
+        g = nx.DiGraph()
+        for s in self.steps:
+            for p in s.parents:
+                g.add_edge(p, s.id)
+        return g
 
 
 OffsetMap = dict[int, Step]
 
 
 def optimise(recipe: Recipe) -> OffsetMap:
-    pass
+    g = recipe.to_graph()
+
+    offsets = {}
+
+    steps = {s.id: s for s in recipe.steps}
+
+    for sid in reversed(list(nx.topological_sort(g))):
+        try:
+            offsets[sid] = max(
+                offsets[c] + steps[c].duration for c in g.successors(sid)
+            )
+        except ValueError:
+            # no children
+            offsets[sid] = 0
+
+    # TODO: resolve conflicts
+
+    return offsets
 
 
 def format(optimised: OffsetMap) -> str:
-    pass
+    return "\n".join(
+        f"{offset:>3}: {sid}"
+        for sid, offset in sorted(optimised.items(), key=lambda x: x[1])
+    )
 
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument("recipe_json", type=FileType)
+    parser.add_argument("recipe_json", type=FileType("r"))
 
     args = parser.parse_args()
 
