@@ -1,0 +1,17 @@
+{
+    "steps": [
+        {
+            "id": "a1",
+            "duration": 5,
+            "prepable": true
+        },
+        {
+            "id": "2b",
+            "duration": 15,
+            "hands_off": true,
+            "parents": [
+                "a1"
+            ]
+        }
+    ]
+}

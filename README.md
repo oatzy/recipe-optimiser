@@ -1,2 +1,3 @@
 # recipe-optimiser
-Optimise recipes with parallel steps
+
+Optimise recipes with parallel steps.
