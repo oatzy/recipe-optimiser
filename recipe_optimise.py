@@ -49,6 +49,8 @@ def optimise(recipe: Recipe) -> OffsetMap:
 
     steps = {s.id: s for s in recipe.steps}
 
+    # layout the steps, starting at the last one
+    # such that each step appears before its children
     for sid in reversed(list(nx.topological_sort(g))):
         try:
             offsets[sid] = max(
@@ -58,16 +60,24 @@ def optimise(recipe: Recipe) -> OffsetMap:
             # no children
             offsets[sid] = 0
 
-    # TODO: resolve conflicts
+    # TODO:
+    # starting at offset 0 and increasing until all steps are resolved
+    # check for conflicts -- multiple 'hands on' steps overlapping at the offset being considered
+    #   if so, pick one to stay in place
+    #          if a one step is prepable and another isn't, the prepable step always moves
+    #          if multiple of the steps are not prepable, move the one(s) which would move the shortest distance
+    #   steps which must move are shifted to offset of the step which didn't move plus that step's duration
+    #          any parents of the moved step must also move
+    # continue until the final offset is reached
 
-    return offsets
+    # invert the offsets
+    total = max(off + steps[s].duration for s, off in offsets.items())
+    return {total - off - steps[s].duration: s for s, off in offsets.items()}
 
 
 def format(optimised: OffsetMap) -> str:
-    return "\n".join(
-        f"{offset:>3}: {sid}"
-        for sid, offset in sorted(optimised.items(), key=lambda x: x[1])
-    )
+    # TODO: format something like git log --graph
+    return "\n".join(f"{offset:>3}: {sid}" for offset, sid in sorted(optimised.items()))
 
 
 def main():

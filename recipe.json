@@ -4,31 +4,37 @@
         {
             "id": "1a",
             "duration": 5,
-            "prepable": true
+            "prepable": true,
+            "instruction": "Pre-heat oven to 200"
         },
         {
             "id": "1b",
-            "duration": 5
+            "duration": 5,
+            "instruction": "Bring a large saucepan of water to the boil"
         },
         {
             "id": "1c",
             "duration": 2,
-            "prepable": true
+            "prepable": true,
+            "instruction": "Peel and grate the garlic"
         },
         {
             "id": "1d",
             "duration": 3,
-            "prepable": true
+            "prepable": true,
+            "instruction": "Grate the apple"
         },
         {
             "id": "1e",
             "duration": 4,
-            "prepable": true
+            "prepable": true,
+            "instruction": "Slice the red onion"
         },
         {
             "id": "1f",
             "duration": 3,
-            "prepable": true
+            "prepable": true,
+            "instruction": "Chop potatoes into chunks"
         },
         {
             "id": "1g",
@@ -36,23 +42,26 @@
             "parents": [
                 "1c",
                 "1d"
-            ]
+            ],
+            "instruction": "Combine ingredients for meatballs"
         },
         {
             "id": "2a",
             "duration": 5,
             "parents": [
                 "1g"
-            ]
+            ],
+            "instruction": "Roll mince into evenly-sized balls"
         },
         {
             "id": "2b",
             "duration": 15,
             "hands_off": true,
             "parents": [
-                "a1",
+                "1a",
                 "2a"
-            ]
+            ],
+            "instruction": "Put meatballs in oven"
         },
         {
             "id": "2c",
@@ -60,7 +69,8 @@
             "parents": [
                 "2b"
             ],
-            "prepable": true
+            "prepable": true,
+            "instruction": "Remove from oven"
         },
         {
             "id": "2d",
@@ -69,14 +79,16 @@
                 "1b",
                 "1f"
             ],
-            "hands_off": true
+            "hands_off": true,
+            "instruction": "Boil the Potatoes"
         },
         {
             "id": "3a",
             "duration": 2,
             "parents": [
                 "1e"
-            ]
+            ],
+            "instruction": "Heat oil in a large frying pan"
         },
         {
             "id": "3b",
@@ -84,21 +96,24 @@
             "parents": [
                 "3a"
             ],
-            "hands_off": true
+            "hands_off": true,
+            "instruction": "Add onions to pan, fry until golden"
         },
         {
             "id": "3c",
             "duration": 2,
             "parents": [
                 "3b"
-            ]
+            ],
+            "instruction": "Add balsamic vinegar and sugar, caramelise"
         },
         {
             "id": "4a",
             "duration": 1,
             "parents": [
                 "3c"
-            ]
+            ],
+            "instruction": "Add wine stock, etc. to onions"
         },
         {
             "id": "4b",
@@ -106,32 +121,37 @@
             "parents": [
                 "4a"
             ],
-            "hands_off": true
+            "hands_off": true,
+            "instruction": "Bring to boil and simmer"
         },
         {
             "id": "5a",
             "duration": 1,
             "parents": [
                 "2d"
-            ]
+            ],
+            "instruction": "Drain potatoes"
         },
         {
             "id": "5b",
             "duration": 3,
             "parents": [
                 "5a"
-            ]
+            ],
+            "instruction": "Mash potatoes"
         },
         {
             "id": "5c",
-            "duration": 2
+            "duration": 2,
+            "instruction": "Heat oil in medium sauce pan"
         },
         {
             "id": "5d",
             "duration": 2,
             "parents": [
                 "5c"
-            ]
+            ],
+            "instruction": "Add cabbage and stir fry"
         },
         {
             "id": "5e",
@@ -139,7 +159,8 @@
             "parents": [
                 "5d"
             ],
-            "hands_off": true
+            "hands_off": true,
+            "instruction": "Cover, cook until tender"
         },
         {
             "id": "6a",
@@ -147,7 +168,8 @@
             "parents": [
                 "2c",
                 "4b"
-            ]
+            ],
+            "instruction": "Stir meatballs into gravy"
         },
         {
             "id": "6b",
@@ -156,7 +178,8 @@
                 "5b",
                 "5e",
                 "6a"
-            ]
+            ],
+            "instruction": "Serve"
         }
     ]
 }
