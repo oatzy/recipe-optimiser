@@ -11,7 +11,7 @@ from pathlib import Path
 
 import ollama
 
-MODEL_NAME = "llama3"
+MODEL_NAME = "tinyllama"
 
 
 def parse_recipe(recipe_text: str, system_prompt: str) -> dict:
