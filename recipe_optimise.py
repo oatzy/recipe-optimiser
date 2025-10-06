@@ -32,13 +32,6 @@ class Recipe:
     def from_json(cls, data):
         return cls(steps=[Step(**i) for i in data["steps"]])
 
-    def to_graph(self) -> nx.DiGraph:
-        g = nx.DiGraph()
-        for s in self.steps:
-            for p in s.parents:
-                g.add_edge(p, s.id)
-        return g
-
 
 @dataclass
 class Offset:
@@ -52,6 +45,7 @@ class OffsetMap:
 
     def __post_init__(self):
         self._map: dict[str, Offset] = {x.step.id: x for x in self.offsets}
+        self._graph = to_graph([x.step for x in self.offsets])
 
     def get_steps(self, pos: int) -> list[Step]:
         return [
@@ -66,29 +60,37 @@ class OffsetMap:
 
         return [s for s in steps if s != stick], stick.duration
 
-    def move_after(self, step: Step, target: int):
+    def move_after(self, step: Step, target: int) -> bool:
         distance = target - self._map[step.id].offset
-        self.move(step, distance)
+        return self.move(step, distance)
 
-    def move(self, step: Step, distance: int):
+    def move(self, step: Step, distance: int) -> bool:
+        """
+        :returns: True if children were moved and we need to backtrack
+        """
         # a step may be the parent of multiple steps
         # but only want to move it once
         seen: set[str] = set()
-        parents = deque([step.id])
+        backtrack = False
+        to_move = deque([step.id])
 
-        while parents:
-            sid = parents.pop()
+        while to_move:
+            sid = to_move.pop()
 
             if sid in seen:
                 continue
 
+            seen.add(sid)
+
             off = self._map[sid]
             off.offset += distance
 
-            parents.extendleft(off.step.parents)
+            to_move.extendleft(off.step.parents)
+            if not off.step.prepable:
+                backtrack = True
+                to_move.extendleft(self._graph.successors(sid))
 
-        # TODO: if the step isn't prepable
-        # we should also pull forward its children
+        return backtrack
 
     def total_time(self) -> int:
         return max(x.offset + x.step.duration for x in self.offsets)
@@ -100,13 +102,21 @@ class OffsetMap:
         )
 
 
+def to_graph(steps: list[Step]) -> nx.DiGraph:
+    g = nx.DiGraph()
+    for s in steps:
+        for p in s.parents:
+            g.add_edge(p, s.id)
+    return g
+
+
 def get_conflicts(steps: list[Step]) -> list[Step] | None:
     hands_on = [s for s in steps if not s.hands_off]
     return None if len(hands_on) < 2 else hands_on
 
 
 def optimise(recipe: Recipe) -> OffsetMap:
-    g = recipe.to_graph()
+    g = to_graph(recipe.steps)
 
     offsets: dict[str, int] = {}
 
@@ -131,11 +141,16 @@ def optimise(recipe: Recipe) -> OffsetMap:
             off += 1
             continue
 
+        backtrack = False
+
         moves, target_offset = offset_map.get_moves(conflicts)
         for move in moves:
-            offset_map.move_after(move, target_offset)
+            backtrack |= offset_map.move_after(move, target_offset)
 
-        off += 1
+        if backtrack:
+            off = 0
+        else:
+            off += 1
 
     return offset_map.reverse()
 
