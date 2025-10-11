@@ -11,6 +11,7 @@ import logging
 from argparse import ArgumentParser, FileType
 from collections import deque
 from dataclasses import dataclass, field
+from typing import Iterator
 
 import networkx as nx
 
@@ -167,12 +168,19 @@ def optimise(recipe: Recipe) -> OffsetMap:
     return offset_map.reverse()
 
 
-def format(optimised: OffsetMap) -> str:
-    # TODO: format something like git log --graph
-    return "\n".join(
-        f"{x.offset:>3}-{x.offset + x.step.duration:>3}: {x.step.id} - {x.step.instruction}"
-        for x in sorted(optimised.offsets, key=lambda x: x.offset)
-    )
+def format(optimised: OffsetMap) -> Iterator[str]:
+    total = optimised.total_time()
+
+    for x in sorted(optimised.offsets, key=lambda x: x.offset):
+        c = "X" if x.step.hands_off else "#"
+
+        prefix = f"[{x.offset:>2} - {x.offset + x.step.duration:>2}]  "
+        padding = total - (x.offset + x.step.duration)
+        suffix = f"  ({x.step.id}) {x.step.instruction}"
+
+        yield (
+            prefix + (" " * x.offset) + (c * x.step.duration) + (" " * padding) + suffix
+        )
 
 
 def main():
@@ -189,7 +197,8 @@ def main():
 
     optimised = optimise(recipe)
 
-    print(format(optimised))
+    for line in format(optimised):
+        print(line)
 
 
 if __name__ == "__main__":

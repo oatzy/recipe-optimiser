@@ -4,12 +4,13 @@
         {
             "id": "1a",
             "duration": 5,
-            "prepable": true,
+            "hands_off": true,
             "instruction": "Pre-heat oven to 200"
         },
         {
             "id": "1b",
             "duration": 5,
+            "hands_off": true,
             "instruction": "Bring a large saucepan of water to the boil"
         },
         {
