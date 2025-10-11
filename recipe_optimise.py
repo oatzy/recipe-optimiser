@@ -6,12 +6,16 @@
 # ///
 
 import json
+import logging
 
 from argparse import ArgumentParser, FileType
 from collections import deque
 from dataclasses import dataclass, field
 
 import networkx as nx
+
+logger = logging.getLogger()
+logger.addHandler(logging.StreamHandler())
 
 
 @dataclass(kw_only=True)
@@ -58,7 +62,9 @@ class OffsetMap:
 
         stick = min(possible_sticks, key=lambda s: s.duration + self._map[s.id].offset)
 
-        return [s for s in steps if s != stick], stick.duration
+        return [s for s in steps if s != stick], stick.duration + self._map[
+            stick.id
+        ].offset
 
     def move_after(self, step: Step, target: int) -> bool:
         distance = target - self._map[step.id].offset
@@ -86,9 +92,9 @@ class OffsetMap:
             off.offset += distance
 
             to_move.extendleft(off.step.parents)
-            if not off.step.prepable:
-                backtrack = True
-                to_move.extendleft(self._graph.successors(sid))
+            # if not off.step.prepable:
+            #     backtrack = True
+            #     to_move.extendleft(self._graph.successors(sid))
 
         return backtrack
 
@@ -137,17 +143,23 @@ def optimise(recipe: Recipe) -> OffsetMap:
 
     off = 0
     while steps := offset_map.get_steps(off):
+        logger.debug(f"{off}: {steps}")
         if not (conflicts := get_conflicts(steps)):
             off += 1
+            logger.debug("no conflicts")
             continue
+
+        logger.debug(f"{conflicts=}")
 
         backtrack = False
 
         moves, target_offset = offset_map.get_moves(conflicts)
+        logger.debug(f"{target_offset} -> {moves}")
         for move in moves:
             backtrack |= offset_map.move_after(move, target_offset)
 
         if backtrack:
+            logger.debug("backtracking")
             off = 0
         else:
             off += 1
@@ -158,7 +170,7 @@ def optimise(recipe: Recipe) -> OffsetMap:
 def format(optimised: OffsetMap) -> str:
     # TODO: format something like git log --graph
     return "\n".join(
-        f"{x.offset:>3}: {x.step.id}"
+        f"{x.offset:>3}-{x.offset + x.step.duration:>3}: {x.step.id} - {x.step.instruction}"
         for x in sorted(optimised.offsets, key=lambda x: x.offset)
     )
 
@@ -166,8 +178,12 @@ def format(optimised: OffsetMap) -> str:
 def main():
     parser = ArgumentParser()
     parser.add_argument("recipe_json", type=FileType("r"))
+    parser.add_argument("-v", "--verbose", action="store_true")
 
     args = parser.parse_args()
+
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
 
     recipe = Recipe.from_json(json.load(args.recipe_json))
 
