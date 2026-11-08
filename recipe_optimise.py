@@ -169,6 +169,61 @@ def optimise(recipe: Recipe) -> OffsetMap:
     return offset_map.reverse()
 
 
+def brute_force(recipe: Recipe) -> OffsetMap:
+    """
+    Try every order of hands-on steps, working back from the end and placing
+    each step as late as it can go. Best = least time non-prepable steps sit
+    waiting for their next step, then shortest total time.
+
+    shortcut: each step goes as late as possible, which can miss schedules where
+    leaving a gap is better; fine for recipe-sized inputs, swap for a solver if not.
+    """
+    g = to_graph(recipe.steps)
+    steps = {s.id: s for s in recipe.steps}
+    best: list = [(float("inf"), float("inf")), {}]
+
+    # offsets are measured back from the end, like optimise()
+    def ready_at(sid: str, placed: dict[str, int]) -> int:
+        return max((placed[c] + steps[c].duration for c in g.successors(sid)), default=0)
+
+    def search(placed: dict[str, int], busy: list[tuple[int, int]], wait: int, total: int):
+        if (wait, total) >= best[0]:
+            return
+
+        ready = [
+            sid
+            for sid in steps
+            if sid not in placed and all(c in placed for c in g.successors(sid))
+        ]
+        if not ready:
+            best[:] = [(wait, total), placed]
+            return
+
+        # hands-off steps don't compete for the cook, so their position is forced
+        if hands_off := [sid for sid in ready if steps[sid].hands_off]:
+            placed = {**placed, **{sid: ready_at(sid, placed) for sid in hands_off}}
+            total = max(total, *(placed[sid] + steps[sid].duration for sid in hands_off))
+            return search(placed, busy, wait, total)
+
+        for sid in ready:
+            step = steps[sid]
+            start = earliest = ready_at(sid, placed)
+            for a, b in busy:  # sorted; slide past any hands-on step in the way
+                if start + step.duration <= a:
+                    break
+                start = max(start, b)
+
+            search(
+                {**placed, sid: start},
+                sorted(busy + [(start, start + step.duration)]),
+                wait + (0 if step.prepable else start - earliest),
+                max(total, start + step.duration),
+            )
+
+    search({}, [], 0, 0)
+    return OffsetMap([Offset(off, steps[sid]) for sid, off in best[1].items()]).reverse()
+
+
 def format(optimised: OffsetMap) -> Iterator[str]:
     total = optimised.total_time()
 
@@ -188,6 +243,7 @@ def main():
     parser = ArgumentParser()
     parser.add_argument("recipe_json", type=FileType("r"))
     parser.add_argument("-v", "--verbose", action="store_true")
+    parser.add_argument("--brute-force", action="store_true")
 
     args = parser.parse_args()
 
@@ -196,7 +252,7 @@ def main():
 
     recipe = Recipe.from_json(json.load(args.recipe_json))
 
-    optimised = optimise(recipe)
+    optimised = (brute_force if args.brute_force else optimise)(recipe)
 
     for line in format(optimised):
         print(line)
