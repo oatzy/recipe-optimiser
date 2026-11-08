@@ -3,12 +3,12 @@ from pathlib import Path
 
 import pytest
 
-from recipe_optimise import Recipe, brute_force, optimise
+from recipe_optimise import Recipe, optimise, solve
 
 RECIPES = ["recipe.json", "spaghetti-with-tomato-sauce.json"]
 
 
-@pytest.mark.parametrize("optimiser", [optimise, brute_force])
+@pytest.mark.parametrize("optimiser", [optimise, solve])
 @pytest.mark.parametrize("path", RECIPES)
 def test_optimised_timeline_is_valid(path, optimiser):
     recipe = Recipe.from_json(json.loads(Path(__file__).with_name(path).read_text()))
@@ -28,7 +28,7 @@ def test_optimised_timeline_is_valid(path, optimiser):
             assert not overlap, (a.step.id, b.step.id)
 
 
-@pytest.mark.parametrize("optimiser", [optimise, brute_force])
+@pytest.mark.parametrize("optimiser", [optimise, solve])
 def test_isolated_step_is_kept(optimiser):
     recipe = Recipe.from_json(
         {

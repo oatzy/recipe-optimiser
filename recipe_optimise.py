@@ -2,7 +2,7 @@
 #
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["networkx"]
+# dependencies = ["networkx", "ortools"]
 # ///
 
 import json
@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from typing import Iterator
 
 import networkx as nx
+from ortools.sat.python import cp_model
 
 logger = logging.getLogger()
 logger.addHandler(logging.StreamHandler())
@@ -169,59 +170,42 @@ def optimise(recipe: Recipe) -> OffsetMap:
     return offset_map.reverse()
 
 
-def brute_force(recipe: Recipe) -> OffsetMap:
+def solve(recipe: Recipe, time_limit: float = 60) -> OffsetMap:
     """
-    Try every order of hands-on steps, working back from the end and placing
-    each step as late as it can go. Best = least time non-prepable steps sit
-    waiting for their next step, then shortest total time.
-
-    shortcut: each step goes as late as possible, which can miss schedules where
-    leaving a gap is better; fine for recipe-sized inputs, swap for a solver if not.
+    Exact search with OR-Tools CP-SAT. Best = least time non-prepable steps
+    sit waiting for their next step, then shortest total time.
     """
-    g = to_graph(recipe.steps)
-    steps = {s.id: s for s in recipe.steps}
-    best: list = [(float("inf"), float("inf")), {}]
+    m = cp_model.CpModel()
+    horizon = sum(s.duration for s in recipe.steps)
+    start = {s.id: m.new_int_var(0, horizon, s.id) for s in recipe.steps}
+    end = {s.id: start[s.id] + s.duration for s in recipe.steps}
 
-    # offsets are measured back from the end, like optimise()
-    def ready_at(sid: str, placed: dict[str, int]) -> int:
-        return max((placed[c] + steps[c].duration for c in g.successors(sid)), default=0)
+    for s in recipe.steps:
+        for p in s.parents:
+            m.add(end[p] <= start[s.id])
 
-    def search(placed: dict[str, int], busy: list[tuple[int, int]], wait: int, total: int):
-        if (wait, total) >= best[0]:
-            return
+    m.add_no_overlap(
+        m.new_fixed_size_interval_var(start[s.id], s.duration, f"i{s.id}")
+        for s in recipe.steps if not s.hands_off
+    )
 
-        ready = [
-            sid
-            for sid in steps
-            if sid not in placed and all(c in placed for c in g.successors(sid))
-        ]
-        if not ready:
-            best[:] = [(wait, total), placed]
-            return
+    waits = []
+    for s in recipe.steps:
+        kids = [c.id for c in recipe.steps if s.id in c.parents]
+        if kids and not s.prepable:
+            first = m.new_int_var(0, horizon, f"first{s.id}")
+            m.add_min_equality(first, [start[c] for c in kids])
+            waits.append(first - end[s.id])
 
-        # hands-off steps don't compete for the cook, so their position is forced
-        if hands_off := [sid for sid in ready if steps[sid].hands_off]:
-            placed = {**placed, **{sid: ready_at(sid, placed) for sid in hands_off}}
-            total = max(total, *(placed[sid] + steps[sid].duration for sid in hands_off))
-            return search(placed, busy, wait, total)
+    total = m.new_int_var(0, horizon, "total")
+    m.add_max_equality(total, list(end.values()))
+    m.minimize(sum(waits) * (horizon + 1) + total)  # waiting first, then total time
 
-        for sid in ready:
-            step = steps[sid]
-            start = earliest = ready_at(sid, placed)
-            for a, b in busy:  # sorted; slide past any hands-on step in the way
-                if start + step.duration <= a:
-                    break
-                start = max(start, b)
-
-            search(
-                {**placed, sid: start},
-                sorted(busy + [(start, start + step.duration)]),
-                wait + (0 if step.prepable else start - earliest),
-                max(total, start + step.duration),
-            )
-
-    search({}, [], 0, 0)
-    return OffsetMap([Offset(off, steps[sid]) for sid, off in best[1].items()]).reverse()
+    solver = cp_model.CpSolver()
+    solver.parameters.max_time_in_seconds = time_limit
+    status = solver.solve(m)
+    assert status in (cp_model.OPTIMAL, cp_model.FEASIBLE), solver.status_name(status)
+    return OffsetMap([Offset(solver.value(start[s.id]), s) for s in recipe.steps])
 
 
 def format(optimised: OffsetMap) -> Iterator[str]:
@@ -243,7 +227,7 @@ def main():
     parser = ArgumentParser()
     parser.add_argument("recipe_json", type=FileType("r"))
     parser.add_argument("-v", "--verbose", action="store_true")
-    parser.add_argument("--brute-force", action="store_true")
+    parser.add_argument("--solver", action="store_true")
 
     args = parser.parse_args()
 
@@ -252,7 +236,7 @@ def main():
 
     recipe = Recipe.from_json(json.load(args.recipe_json))
 
-    optimised = (brute_force if args.brute_force else optimise)(recipe)
+    optimised = (solve if args.solver else optimise)(recipe)
 
     for line in format(optimised):
         print(line)
