@@ -13,4 +13,6 @@ An ordering is considered optimal if
 
 Convert a recipe to JSON with the Claude Code skill `/parse-recipe <recipe.txt>`, then run `uv run recipe_optimise.py <recipe>.json`.
 
+Add `--brute-force` to try every order of hands-on steps instead of the faster heuristic. It can find a better plan, but takes seconds rather than milliseconds on larger recipes.
+
 Run the tests with `uv run --with pytest --with networkx pytest`.
