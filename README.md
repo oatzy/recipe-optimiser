@@ -12,3 +12,5 @@ An ordering is considered optimal if
 ## Usage
 
 Convert a recipe to JSON with the Claude Code skill `/parse-recipe <recipe.txt>`, then run `uv run recipe_optimise.py <recipe>.json`.
+
+Run the tests with `uv run --with pytest --with networkx pytest`.

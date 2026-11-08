@@ -112,6 +112,7 @@ class OffsetMap:
 def to_graph(steps: list[Step]) -> nx.DiGraph:
     g = nx.DiGraph()
     for s in steps:
+        g.add_node(s.id)  # keep steps with no parents or children
         for p in s.parents:
             g.add_edge(p, s.id)
     return g
