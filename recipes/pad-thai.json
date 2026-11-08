@@ -1,0 +1,148 @@
+{
+    "name": "Pad Thai",
+    "source": "https://en.wikibooks.org/wiki/Cookbook:Pad_Thai",
+    "steps": [
+        {
+            "id": "0a",
+            "instruction": "Chop the garlic",
+            "duration": 2,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "0b",
+            "instruction": "Shred or chop the vegetables",
+            "duration": 6,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "0c",
+            "instruction": "Chop the green onions",
+            "duration": 2,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "0d",
+            "instruction": "Chop the peanuts",
+            "duration": 3,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "1a",
+            "instruction": "Soak the noodles in warm water",
+            "duration": 20,
+            "parents": [],
+            "hands_off": true,
+            "prepable": true
+        },
+        {
+            "id": "1b",
+            "instruction": "Strain the noodles",
+            "duration": 1,
+            "parents": [
+                "1a"
+            ],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "2",
+            "instruction": "Mix the fish sauce, vinegar, sugar and tamarind juice",
+            "duration": 2,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "3a",
+            "instruction": "Heat the oil in a wok on high",
+            "duration": 2,
+            "parents": [],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "3b",
+            "instruction": "Brown the garlic and chili flakes",
+            "duration": 1,
+            "parents": [
+                "3a",
+                "0a"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "4",
+            "instruction": "Cook the meat or tofu until browned",
+            "duration": 8,
+            "parents": [
+                "3b"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "5",
+            "instruction": "Add the vegetables and cook until tender",
+            "duration": 4,
+            "parents": [
+                "4",
+                "0b"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "6",
+            "instruction": "Add the noodles, crack in the eggs, let them cook, then mix",
+            "duration": 3,
+            "parents": [
+                "5",
+                "1b"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "7",
+            "instruction": "Add the fish sauce mix and turn the heat down to medium",
+            "duration": 1,
+            "parents": [
+                "6",
+                "2"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "8",
+            "instruction": "Add the green onions and bean sprouts and stir fry",
+            "duration": 2,
+            "parents": [
+                "7",
+                "0c"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "9",
+            "instruction": "Serve, garnished with the chopped peanuts",
+            "duration": 2,
+            "parents": [
+                "8",
+                "0d"
+            ],
+            "hands_off": false,
+            "prepable": false
+        }
+    ]
+}

@@ -1,0 +1,63 @@
+{
+    "name": "Toad in the Hole",
+    "source": "https://en.wikibooks.org/wiki/Cookbook:Toad_in_the_Hole",
+    "steps": [
+        {
+            "id": "0a",
+            "instruction": "Make the Yorkshire pudding batter",
+            "duration": 5,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "1",
+            "instruction": "Preheat the oven to 200C",
+            "duration": 10,
+            "parents": [],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "2",
+            "instruction": "Bake the sausages with the oil in a roasting pan",
+            "duration": 10,
+            "parents": [
+                "1"
+            ],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "3",
+            "instruction": "Pour the batter into the hot pan",
+            "duration": 1,
+            "parents": [
+                "2",
+                "0a"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "4",
+            "instruction": "Bake without opening the oven door",
+            "duration": 45,
+            "parents": [
+                "3"
+            ],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "5",
+            "instruction": "Remove and serve hot",
+            "duration": 1,
+            "parents": [
+                "4"
+            ],
+            "hands_off": false,
+            "prepable": false
+        }
+    ]
+}

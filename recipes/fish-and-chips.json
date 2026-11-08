@@ -1,0 +1,121 @@
+{
+    "name": "Fish and Chips",
+    "source": "https://en.wikibooks.org/wiki/Cookbook:Fish_and_Chips",
+    "steps": [
+        {
+            "id": "0a",
+            "instruction": "Cut the lemon into wedges",
+            "duration": 1,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "1",
+            "instruction": "Preheat the oil in a deep fryer to 180C",
+            "duration": 10,
+            "parents": [],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "2a",
+            "instruction": "Peel the potatoes and cut into thick wedges",
+            "duration": 6,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "2b",
+            "instruction": "Deep-fry the chips in batches until crisp and golden",
+            "duration": 16,
+            "parents": [
+                "1",
+                "2a"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "3",
+            "instruction": "Drain the chips, sprinkle with salt and keep warm",
+            "duration": 2,
+            "parents": [
+                "2b"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "4",
+            "instruction": "Whisk the flours, salt and cold water into a batter",
+            "duration": 3,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "5a",
+            "instruction": "Cut the fish into thick slices",
+            "duration": 3,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "5b",
+            "instruction": "Coat the fish in the batter",
+            "duration": 2,
+            "parents": [
+                "4",
+                "5a"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "6a",
+            "instruction": "Deep-fry the fish in batches",
+            "duration": 12,
+            "parents": [
+                "1",
+                "5b"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "6b",
+            "instruction": "Drain the fish on kitchen paper",
+            "duration": 1,
+            "parents": [
+                "6a"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "7",
+            "instruction": "Plate the fish and chips and garnish with lemon and parsley",
+            "duration": 2,
+            "parents": [
+                "3",
+                "6b",
+                "0a"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "8",
+            "instruction": "Season with salt and vinegar",
+            "duration": 1,
+            "parents": [
+                "7"
+            ],
+            "hands_off": false,
+            "prepable": false
+        }
+    ]
+}

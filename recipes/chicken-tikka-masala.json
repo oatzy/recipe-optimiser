@@ -1,0 +1,129 @@
+{
+    "name": "Chicken Tikka Masala",
+    "source": "https://en.wikibooks.org/wiki/Cookbook:Chicken_Tikka_Masala",
+    "steps": [
+        {
+            "id": "0a",
+            "instruction": "Finely chop the garlic",
+            "duration": 3,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "0b",
+            "instruction": "Finely chop the onions",
+            "duration": 4,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "0c",
+            "instruction": "Chop the tomatoes",
+            "duration": 2,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "0d",
+            "instruction": "Chop the chiles",
+            "duration": 2,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "0e",
+            "instruction": "Chop the cilantro",
+            "duration": 2,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "1",
+            "instruction": "Heat the oil in a wok",
+            "duration": 2,
+            "parents": [],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "2",
+            "instruction": "Stir-fry the garlic and onions until browned",
+            "duration": 6,
+            "parents": [
+                "1",
+                "0a",
+                "0b"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "3",
+            "instruction": "Add the curry pastes and mix well, adding a little water",
+            "duration": 2,
+            "parents": [
+                "2"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "4",
+            "instruction": "Add the chicken tikka and stir-fry to heat through",
+            "duration": 2,
+            "parents": [
+                "3"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "5a",
+            "instruction": "Add the tomatoes, vinegar, tomato paste and chilies",
+            "duration": 1,
+            "parents": [
+                "4",
+                "0c",
+                "0d"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "5b",
+            "instruction": "Simmer",
+            "duration": 5,
+            "parents": [
+                "5a"
+            ],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "6",
+            "instruction": "Add the cream, garam masala and cilantro and simmer briefly",
+            "duration": 3,
+            "parents": [
+                "5b",
+                "0e"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "7",
+            "instruction": "Garnish with coriander and serve",
+            "duration": 1,
+            "parents": [
+                "6"
+            ],
+            "hands_off": false,
+            "prepable": false
+        }
+    ]
+}

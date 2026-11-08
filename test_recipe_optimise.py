@@ -6,12 +6,15 @@ import pytest
 
 from recipe_optimise import GOALS, Recipe, optimise, solve
 
-RECIPES = ["recipe.json", "spaghetti-with-tomato-sauce.json"]
+RECIPES = ["recipe.json", "spaghetti-with-tomato-sauce.json"] + sorted(
+    str(p.relative_to(Path(__file__).parent))
+    for p in Path(__file__).with_name("recipes").glob("*.json")
+)
 OPTIMISERS = [optimise] + [partial(solve, goal=g) for g in GOALS]
 
 
 def load(path):
-    return Recipe.from_json(json.loads(Path(__file__).with_name(path).read_text()))
+    return Recipe.from_json(json.loads((Path(__file__).parent / path).read_text()))
 
 
 def waiting(timeline):

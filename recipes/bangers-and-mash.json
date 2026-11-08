@@ -1,0 +1,92 @@
+{
+    "name": "Bangers and Mash",
+    "source": "https://en.wikibooks.org/wiki/Cookbook:Bangers_and_Mash",
+    "steps": [
+        {
+            "id": "b1",
+            "instruction": "Warm a large frying pan with a little oil over a medium heat",
+            "duration": 3,
+            "parents": [],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "b2",
+            "instruction": "Fry the sausages, turning to colour them all over",
+            "duration": 5,
+            "parents": [
+                "b1"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "b3",
+            "instruction": "Turn the heat down and fry gently, turning every 5-10 minutes",
+            "duration": 25,
+            "parents": [
+                "b2"
+            ],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "m1a",
+            "instruction": "Peel the potatoes and chop into 1-2 cm pieces",
+            "duration": 6,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "m1b",
+            "instruction": "Bring a large pan of water to the boil",
+            "duration": 10,
+            "parents": [],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "m1c",
+            "instruction": "Boil the potatoes vigorously",
+            "duration": 15,
+            "parents": [
+                "m1a",
+                "m1b"
+            ],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "m2",
+            "instruction": "Drain and return to the pan, off the heat",
+            "duration": 2,
+            "parents": [
+                "m1c"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "m3",
+            "instruction": "Mash with butter and a splash of milk",
+            "duration": 4,
+            "parents": [
+                "m2"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "s",
+            "instruction": "Serve",
+            "duration": 1,
+            "parents": [
+                "b3",
+                "m3"
+            ],
+            "hands_off": false,
+            "prepable": false
+        }
+    ]
+}

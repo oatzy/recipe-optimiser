@@ -1,0 +1,229 @@
+{
+    "name": "Shepherd's Pie",
+    "source": "https://en.wikibooks.org/wiki/Cookbook:Shepherd's_Pie_I",
+    "steps": [
+        {
+            "id": "1a",
+            "instruction": "Heat oil in a pan",
+            "duration": 2,
+            "parents": [],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "1b",
+            "instruction": "Brown the mince",
+            "duration": 5,
+            "parents": [
+                "1a"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "2a",
+            "instruction": "Finely chop the onion",
+            "duration": 4,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "2b",
+            "instruction": "Fry the onion in a little butter and salt until clear",
+            "duration": 6,
+            "parents": [
+                "2a"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "3",
+            "instruction": "Add the onions, mixed herbs and pepper to the mince",
+            "duration": 1,
+            "parents": [
+                "1b",
+                "2b"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "4",
+            "instruction": "Sprinkle over the flour, stir and cook",
+            "duration": 4,
+            "parents": [
+                "3"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "5",
+            "instruction": "Cover with stock and simmer",
+            "duration": 30,
+            "parents": [
+                "4"
+            ],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "6",
+            "instruction": "Test the mince for seasoning",
+            "duration": 1,
+            "parents": [
+                "5"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "7a",
+            "instruction": "Peel and chop the potatoes",
+            "duration": 8,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "7b",
+            "instruction": "Bring a large pan of water to the boil",
+            "duration": 10,
+            "parents": [],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "7c",
+            "instruction": "Boil the potatoes until cooked",
+            "duration": 20,
+            "parents": [
+                "7a",
+                "7b"
+            ],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "7d",
+            "instruction": "Skim off the fat and reduce the mince",
+            "duration": 10,
+            "parents": [
+                "6"
+            ],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "7e",
+            "instruction": "Drain the potatoes until completely dry",
+            "duration": 2,
+            "parents": [
+                "7c"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "7f",
+            "instruction": "Mash until smooth",
+            "duration": 4,
+            "parents": [
+                "7e"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "7g",
+            "instruction": "Add butter and season",
+            "duration": 1,
+            "parents": [
+                "7f"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "7h",
+            "instruction": "Slowly add milk while mashing until soft and creamy",
+            "duration": 2,
+            "parents": [
+                "7g"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "8",
+            "instruction": "Put the mince in a shallow oven-proof dish",
+            "duration": 1,
+            "parents": [
+                "7d"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "9",
+            "instruction": "Layer the mash over the meat and brush with melted butter",
+            "duration": 3,
+            "parents": [
+                "8",
+                "7h"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "10a",
+            "instruction": "Grate the cheese",
+            "duration": 3,
+            "parents": [],
+            "hands_off": false,
+            "prepable": true
+        },
+        {
+            "id": "10b",
+            "instruction": "Sprinkle the cheese over the mash",
+            "duration": 1,
+            "parents": [
+                "9",
+                "10a"
+            ],
+            "hands_off": false,
+            "prepable": false
+        },
+        {
+            "id": "12a",
+            "instruction": "Preheat the oven (hot)",
+            "duration": 10,
+            "parents": [],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "12b",
+            "instruction": "Bake until the top is golden brown",
+            "duration": 50,
+            "parents": [
+                "10b",
+                "12a"
+            ],
+            "hands_off": true,
+            "prepable": false
+        },
+        {
+            "id": "13",
+            "instruction": "Serve",
+            "duration": 1,
+            "parents": [
+                "12b"
+            ],
+            "hands_off": false,
+            "prepable": false
+        }
+    ]
+}

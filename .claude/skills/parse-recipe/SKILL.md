@@ -40,7 +40,7 @@ Each step may only have these keys, because `recipe_optimise.py` builds steps wi
 
 ## Rules
 1. **Split compound instructions** into one step per action, especially when the actions can run in parallel. For example, "While the pasta cooks, heat oil and fry the onion" becomes cook pasta, heat oil, and fry onion (parent: heat oil).
-2. **Include implied waiting steps** that the recipe skips over but that take time: preheating the oven, bringing water to the boil, heating oil in a pan. Make them separate steps and put them before the step that needs them. Don't invent any other steps.
+2. **Include implied waiting steps** that the recipe skips over but that take time: preheating the oven, bringing water to the boil, heating oil in a pan. Make them separate steps and put them before the step that needs them. Also add prep that only appears in the ingredients list ("2 cloves garlic, finely chopped") as prepable steps with ids `0a`, `0b`, and so on. If two parts of the dish are served together, add a final "Serve" step that depends on both, so they finish at the same time. Don't invent any other steps.
 3. **Estimate untimed steps realistically, for a home cook rather than a chef.** For example: chop an onion 4-5, mince garlic 2, heat oil 2, boil a large pan of water 10, preheat the oven 10, drain 1, serve 1. For "cook according to the packet", use a typical time for that food (dried spaghetti 10, rice 20).
 4. **Get dependencies from what each step actually needs, not from the order it's written in.** Prep steps usually have no parents. "Once X is cooked" means X is a parent.
 5. Treat a long passive step with occasional stirring ("simmer 10 min, stirring occasionally") as one hands-off step. Don't model the stirring.
