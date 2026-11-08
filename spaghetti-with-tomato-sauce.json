@@ -1,0 +1,12 @@
+{"name":"Spaghetti with tomato sauce","steps":[
+{"id":"1","instruction":"Chop one large onion","duration":5,"parents":[],"hands_off":false,"prepable":true},
+{"id":"2","instruction":"Mince two cloves of garlic","duration":2,"parents":[],"hands_off":false,"prepable":true},
+{"id":"3a","instruction":"Bring a large pan of water to the boil","duration":10,"parents":[],"hands_off":true,"prepable":false},
+{"id":"3b","instruction":"Cook the spaghetti","duration":10,"parents":["3a"],"hands_off":true,"prepable":false},
+{"id":"4a","instruction":"Heat the olive oil in a large pan over medium heat","duration":2,"parents":[],"hands_off":false,"prepable":false},
+{"id":"4b","instruction":"Add the chopped onion and cook until softened","duration":5,"parents":["1","4a"],"hands_off":false,"prepable":false},
+{"id":"5","instruction":"Add the minced garlic and cook until fragrant","duration":1,"parents":["2","4b"],"hands_off":false,"prepable":false},
+{"id":"6a","instruction":"Add chopped tomatoes and oregano, season","duration":1,"parents":["5"],"hands_off":false,"prepable":false},
+{"id":"6b","instruction":"Bring to a simmer and cook, stirring occasionally","duration":10,"parents":["6a"],"hands_off":true,"prepable":false},
+{"id":"7","instruction":"Drain the spaghetti and add it to the sauce","duration":1,"parents":["3b","6b"],"hands_off":false,"prepable":false},
+{"id":"8","instruction":"Tear in basil, toss and serve","duration":1,"parents":["7"],"hands_off":false,"prepable":false}]}
