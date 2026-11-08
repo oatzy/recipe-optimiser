@@ -13,6 +13,10 @@ An ordering is considered optimal if
 
 Convert a recipe to JSON with the Claude Code skill `/parse-recipe <recipe.txt>`, then run `uv run recipe_optimise.py <recipe>.json`.
 
-Add `--solver` to find the best possible plan with the OR-Tools constraint solver instead of the faster heuristic. Best means the least time ingredients sit waiting, then the shortest total time.
+Add `--solver` to find the best possible plan with the OR-Tools constraint solver instead of the faster heuristic. Choose what counts as best with `--goal`:
+
+- `waiting` (default): least time ingredients sit waiting, then shortest total time
+- `total`: shortest total time, then least waiting
+- `both`: least waiting plus total time, counted minute for minute
 
 Run the tests with `uv run --with pytest --with networkx --with ortools pytest`.

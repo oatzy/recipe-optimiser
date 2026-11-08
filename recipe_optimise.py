@@ -170,11 +170,19 @@ def optimise(recipe: Recipe) -> OffsetMap:
     return offset_map.reverse()
 
 
-def solve(recipe: Recipe, time_limit: float = 60) -> OffsetMap:
+GOALS = ("waiting", "total", "both")
+
+
+def solve(recipe: Recipe, goal: str = "waiting", time_limit: float = 60) -> OffsetMap:
     """
-    Exact search with OR-Tools CP-SAT. Best = least time non-prepable steps
-    sit waiting for their next step, then shortest total time.
+    Exact search with OR-Tools CP-SAT. Waiting = time non-prepable steps sit
+    before their next step starts.
+
+    goal="waiting": least waiting, then shortest total time
+    goal="total": shortest total time, then least waiting
+    goal="both": least waiting + total time, minute for minute
     """
+    assert goal in GOALS, goal
     m = cp_model.CpModel()
     horizon = sum(s.duration for s in recipe.steps)
     start = {s.id: m.new_int_var(0, horizon, s.id) for s in recipe.steps}
@@ -199,7 +207,15 @@ def solve(recipe: Recipe, time_limit: float = 60) -> OffsetMap:
 
     total = m.new_int_var(0, horizon, "total")
     m.add_max_equality(total, list(end.values()))
-    m.minimize(sum(waits) * (horizon + 1) + total)  # waiting first, then total time
+    wait = sum(waits)
+    # weights bigger than the other term's maximum make it a strict tie-break
+    m.minimize(
+        {
+            "waiting": wait * (horizon + 1) + total,
+            "total": total * (horizon * len(waits) + 1) + wait,
+            "both": wait + total,
+        }[goal]
+    )
 
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = time_limit
@@ -227,7 +243,12 @@ def main():
     parser = ArgumentParser()
     parser.add_argument("recipe_json", type=FileType("r"))
     parser.add_argument("-v", "--verbose", action="store_true")
-    parser.add_argument("--solver", action="store_true")
+    parser.add_argument("--solver", action="store_true", help="use the OR-Tools solver")
+    parser.add_argument(
+        "--goal",
+        choices=GOALS,
+        help="what the solver minimises first (default: waiting); implies --solver",
+    )
 
     args = parser.parse_args()
 
@@ -236,7 +257,10 @@ def main():
 
     recipe = Recipe.from_json(json.load(args.recipe_json))
 
-    optimised = (solve if args.solver else optimise)(recipe)
+    if args.solver or args.goal:
+        optimised = solve(recipe, args.goal or "waiting")
+    else:
+        optimised = optimise(recipe)
 
     for line in format(optimised):
         print(line)

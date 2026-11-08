@@ -1,17 +1,33 @@
 import json
+from functools import partial
 from pathlib import Path
 
 import pytest
 
-from recipe_optimise import Recipe, optimise, solve
+from recipe_optimise import GOALS, Recipe, optimise, solve
 
 RECIPES = ["recipe.json", "spaghetti-with-tomato-sauce.json"]
+OPTIMISERS = [optimise] + [partial(solve, goal=g) for g in GOALS]
 
 
-@pytest.mark.parametrize("optimiser", [optimise, solve])
+def load(path):
+    return Recipe.from_json(json.loads(Path(__file__).with_name(path).read_text()))
+
+
+def waiting(timeline):
+    t = {x.step.id: x for x in timeline.offsets}
+    total = 0
+    for x in t.values():
+        kids = [c.offset for c in t.values() if x.step.id in c.step.parents]
+        if kids and not x.step.prepable:
+            total += min(kids) - (x.offset + x.step.duration)
+    return total
+
+
+@pytest.mark.parametrize("optimiser", OPTIMISERS)
 @pytest.mark.parametrize("path", RECIPES)
 def test_optimised_timeline_is_valid(path, optimiser):
-    recipe = Recipe.from_json(json.loads(Path(__file__).with_name(path).read_text()))
+    recipe = load(path)
     timeline = {x.step.id: x for x in optimiser(recipe).offsets}
 
     assert timeline.keys() == {s.id for s in recipe.steps}
@@ -28,7 +44,7 @@ def test_optimised_timeline_is_valid(path, optimiser):
             assert not overlap, (a.step.id, b.step.id)
 
 
-@pytest.mark.parametrize("optimiser", [optimise, solve])
+@pytest.mark.parametrize("optimiser", OPTIMISERS)
 def test_isolated_step_is_kept(optimiser):
     recipe = Recipe.from_json(
         {
@@ -40,3 +56,13 @@ def test_isolated_step_is_kept(optimiser):
         }
     )
     assert {x.step.id for x in optimiser(recipe).offsets} == {"1", "2", "3"}
+
+
+@pytest.mark.parametrize("path", RECIPES)
+def test_each_goal_wins_on_its_own_measure(path):
+    recipe = load(path)
+    plans = {g: solve(recipe, g) for g in GOALS}
+    assert plans["total"].total_time() == min(p.total_time() for p in plans.values())
+    assert waiting(plans["waiting"]) == min(waiting(p) for p in plans.values())
+    both = {g: waiting(p) + p.total_time() for g, p in plans.items()}
+    assert both["both"] == min(both.values())
